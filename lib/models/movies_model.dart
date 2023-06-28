@@ -22,7 +22,7 @@ class Movies {
   int page;
   String posterPath;
   bool public;
-  List<Result> results;
+  List<Movie> listMovies;
   int revenue;
   int runtime;
   String sortBy;
@@ -43,7 +43,7 @@ class Movies {
     required this.page,
     required this.posterPath,
     required this.public,
-    required this.results,
+    required this.listMovies,
     required this.revenue,
     required this.runtime,
     required this.sortBy,
@@ -67,8 +67,8 @@ class Movies {
         page: json["page"],
         posterPath: json["poster_path"],
         public: json["public"],
-        results:
-            List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        listMovies:
+            List<Movie>.from(json["results"].map((x) => Movie.fromJson(x))),
         revenue: json["revenue"],
         runtime: json["runtime"],
         sortBy: json["sort_by"],
@@ -92,7 +92,7 @@ class Movies {
         "page": page,
         "poster_path": posterPath,
         "public": public,
-        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+        "results": List<dynamic>.from(listMovies.map((x) => x.toJson())),
         "revenue": revenue,
         "runtime": runtime,
         "sort_by": sortBy,
@@ -133,7 +133,7 @@ enum Iso6391 { EN }
 
 final iso6391Values = EnumValues({"en": Iso6391.EN});
 
-class Result {
+class Movie {
   bool adult;
   String backdropPath;
   List<int> genreIds;
@@ -150,7 +150,7 @@ class Result {
   double voteAverage;
   int voteCount;
 
-  Result({
+  Movie({
     required this.adult,
     required this.backdropPath,
     required this.genreIds,
@@ -168,7 +168,7 @@ class Result {
     required this.voteCount,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory Movie.fromJson(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
