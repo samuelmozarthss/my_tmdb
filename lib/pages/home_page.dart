@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Container(
                                     height: 320,
-                                    margin: EdgeInsets.only(top: 30),
+                                    margin: const EdgeInsets.only(top: 30),
                                     clipBehavior: Clip.hardEdge,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
@@ -123,12 +123,12 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Row(
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.star,
                                               color: Colors.yellow,
                                               size: 20,
                                             ),
-                                            SizedBox(width: 5),
+                                            const SizedBox(width: 5),
                                             Text(
                                               movie.voteAverage.toString(),
                                               style: TextStyle(
