@@ -4,7 +4,6 @@ import 'package:tmdb/controllers/movie_controller.dart';
 import 'package:tmdb/repositories/movies_repository_imp.dart';
 import 'package:tmdb/service/dio_service_imp.dart';
 
-import '../models/movies_model.dart';
 import '../utils/apis.utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,7 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final CarouselController _carouselController = CarouselController();
+  final CarouselController _carouselController1 = CarouselController();
+  final CarouselController _carouselController2 = CarouselController();
   final MovieController _controller = MovieController(
     MoviesRepositoryImp(
       DioServiceImp(),
@@ -25,21 +25,32 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
+      body: SafeArea(
         child: Stack(
           children: [
-            ValueListenableBuilder<Movies?>(
-              valueListenable: _controller.movies,
-              builder: (_, movies, __) => movies != null
-                  ? ListView.separated(
-                      itemCount: movies.listMovies.length,
-                      itemBuilder: (_, idx) => Image.network(
-                        API.REQUEST_IMG(movies.listMovies[idx].posterPath),
-                      ),
-                      separatorBuilder: (_, __) => const Divider(),
-                    )
-                  : Container(),
+            SizedBox.expand(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _carouselController2.jumpToPage(index);
+                    });
+                  },
+                ),
+                carouselController: _carouselController1,
+                items: _controller.movies.value?.listMovies.map(
+                      (movie) {
+                        return Builder(builder: (BuildContext context) {
+                          return SingleChildScrollView(
+                            child: Image.network(
+                              API.REQUEST_IMG(movie.posterPath),
+                            ),
+                          );
+                        });
+                      },
+                    ).toList() ??
+                    [],
+              ),
             ),
             Positioned.fill(
               child: Container(
@@ -67,12 +78,17 @@ class _HomePageState extends State<HomePage> {
               width: MediaQuery.of(context).size.width,
               child: CarouselSlider(
                 options: CarouselOptions(
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _carouselController1.jumpToPage(index);
+                    });
+                  },
                   height: 500.0,
                   aspectRatio: 16 / 9,
                   viewportFraction: 0.70,
                   enlargeCenterPage: true,
                 ),
-                carouselController: _carouselController,
+                carouselController: _carouselController2,
                 items: _controller.movies.value?.listMovies.map(
                       (movie) {
                         return Builder(builder: (BuildContext context) {
@@ -186,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                     ).toList() ??
                     [],
               ),
-            )
+            ),
           ],
         ),
       ),
